@@ -1,4 +1,16 @@
- /* Custom AnnePro2 QMK Layout with Indicator Leds  */
+ /* Custom AnnePro2 QMK Layout with Indicator Leds 
+  *
+  * AnnePro2 Keyboard layout
+  *
+  * BASE Layer: Resembles the standard Obins one, without TAP or Magic Key modifiers.
+  *             FN1 and FN2 keys select Layer 1 and 2 respectively when held down
+  *             Esc outputs tilde ('~') when pressed alongside the Shift button
+  *
+  * FN1 Layer: Mimics Obins' own TAP layer, with arrow keys (WASD) and Volume UP/DOWN
+  *            and mute controls. FN2 key is still mapped to Layer 2
+  *
+  * FN2 Layer: Lighting and RGB Control keys are set up here
+  * */
 
 #include QMK_KEYBOARD_H
 
