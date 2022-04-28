@@ -10,6 +10,8 @@
   *            and mute controls. FN2 key is still mapped to Layer 2
   *
   * FN2 Layer: Lighting and RGB Control keys are set up here
+  *
+  * FN3 Layer: Alternative arrow keys. this layer is sticky once enabled
   * */
 
 #include QMK_KEYBOARD_H
@@ -37,7 +39,7 @@ enum anne_pro_layers {
 * | Ctrl  |  L1   |  Alt  |               space             |  Alt  |  FN1  |  FN2  | Ctrl  |
 * \-----------------------------------------------------------------------------------------/
 */
-const uint16_t keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
+const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 [BASE] = LAYOUT_60_ansi(KC_GESC, KC_1, KC_2, KC_3, KC_4, KC_5, KC_6, KC_7, KC_8, KC_9, KC_0, KC_MINS, KC_EQL, KC_BSPC,
                         KC_TAB, KC_Q, KC_W, KC_E, KC_R, KC_T, KC_Y, KC_U, KC_I, KC_O, KC_P, KC_LBRC, KC_RBRC, KC_BSLS,
                         KC_CAPS, KC_A, KC_S, KC_D, KC_F, KC_G, KC_H, KC_J, KC_K, KC_L, KC_SCLN, KC_QUOT, KC_ENT,
@@ -89,7 +91,21 @@ const uint16_t keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
                        KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, MO(1), KC_TRNS, KC_TRNS
 ),
 
-// LAYER 3
+/*
+* Layer FN3
+* ,-----------------------------------------------------------------------------------------.
+* |  ~  | BT1 | BT2 | BT3 | BT4 |  F5 |  F6 |  F7 |  F8 |LEDTG|LEDI+|LEDPV|LEDNX|    Bksp   |
+* |-----------------------------------------------------------------------------------------+
+* | Tab    |  q  | UP  |  e  |  r  |  t  |  y  |  u  |  i  |  o  | PS | HOME | END |   \    |
+* |-----------------------------------------------------------------------------------------+
+* | Esc     |LEFT |DOWN |RIGHT|  f  |  g  |  h  |  j  |  k  |  l  | PGUP|PGDN |    Enter    |
+* |-----------------------------------------------------------------------------------------+
+* | Shift      |  z  |  x  |  c  |  v  |  b  |  n  |  m  |  ,  |INSRT| DEL |    Shift       |
+* |-----------------------------------------------------------------------------------------+
+* | Ctrl  |  L1   |  Alt  |               space             |  Alt  |  FN1  |  FN2  | Ctrl  |
+* \-----------------------------------------------------------------------------------------/
+*
+*/
 [FN3] = LAYOUT_60_ansi(KC_NO, KC_NO, KC_NO, KC_NO, KC_NO, KC_NO, KC_NO, KC_NO, KC_NO, KC_NO, KC_NO, KC_NO, KC_NO, KC_NO,
                        KC_NO, KC_Q, KC_W, KC_E, KC_R, KC_T, KC_Y, KC_U, KC_I, KC_O, KC_P, KC_LBRC, KC_RBRC, RESET,
                        KC_TRNS, KC_A, KC_S, KC_D, KC_F, KC_G, KC_H, KC_J, KC_K, KC_L, KC_SCLN, KC_QUOT, KC_ENT,
@@ -99,24 +115,32 @@ const uint16_t keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 };
 
 // clang-format on
+
 void keyboard_post_init_user(void) {
     ap2_led_enable();
     ap2_led_set_profile(7);
 }
 
+const ap2_led_t layer_indicators[] = {
+    {.p.red = 0xff, .p.green = 0xff, .p.blue = 0xff, .p.alpha = 0xff}, // BASE
+    {.p.red = 0xff, .p.green = 0x00, .p.blue = 0x00, .p.alpha = 0xff}, // FN1
+    {.p.red = 0x00, .p.green = 0xff, .p.blue = 0x00, .p.alpha = 0xff}, // FN2
+    {.p.red = 0x00, .p.green = 0x00, .p.blue = 0xff, .p.alpha = 0xff}, // FN3
+};
+
 layer_state_t layer_state_set_user(layer_state_t state) {
-    switch (get_highest_layer(state)) {
+      switch (get_highest_layer(state)) {
         case FN1:
             // Set the leds to green
-            ap2_led_set_foreground_color(0x00, 0xFF, 0x00);
+            ap2_led_mask_set_key(0, 0, layer_indicators[FN1]);
             break;
         case FN2:
             // Set the leds to blue
-            ap2_led_set_foreground_color(0x00, 0x00, 0xFF);
+            ap2_led_mask_set_key(0, 0, layer_indicators[FN2]);
             break;
         case FN3:
             // Set the leds to red
-            ap2_led_set_foreground_color(0xFF, 0x00, 0x00);
+            ap2_led_mask_set_key(0, 0, layer_indicators[FN3]);
             break;
         default:
             // Reset back to the current profile
@@ -136,8 +160,6 @@ bool led_update_user(led_t leds) {
         const ap2_led_t color = {.p.red = 0xff, .p.green = 0x00, .p.blue = 0x00, .p.alpha = 0xff};
 
         ap2_led_mask_set_key(2, 0, color);
-        /* NOTE: Instead of colouring the capslock only, you can change the whole
-           keyboard with ap2_led_set_foreground_color */
     } else {
         // Reset the capslock if there is no layer active
         if (!layer_state_is(FN1) && !layer_state_is(FN2) && !layer_state_is(FN3)) {
