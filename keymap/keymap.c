@@ -84,10 +84,10 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 * \-----------------------------------------------------------------------------------------/
 *
 */
-[FN2] = LAYOUT_60_ansi(KC_TRNS, KC_AP2_BT1, KC_AP2_BT2, KC_AP2_BT3, KC_AP2_BT4, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, RGB_TOG, RGB_M_P, RGB_VAD, RGB_VAI, KC_TRNS,
+[FN2] = LAYOUT_60_ansi(KC_TRNS, KC_AP2_BT1, KC_AP2_BT2, KC_AP2_BT3, KC_AP2_BT4, KC_AP2_BT_UNPAIR, KC_TRNS, KC_TRNS, KC_TRNS, KC_AP_LED_TOG, KC_AP_LED_PREV_PROFILE, KC_AP_LED_NEXT_PROFILE, KC_AP_LED_NEXT_INTENSITY, KC_TRNS,
                        MO(2), KC_TRNS, KC_UP, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_PSCR, KC_HOME, KC_END, KC_TRNS,
                        TO(3), KC_LEFT, KC_DOWN, KC_RGHT, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_PGUP, KC_PGDN, KC_TRNS,
-                       KC_TRNS, RGB_MOD, RGB_RMOD, RGB_HUI, RGB_HUD, RGB_SAI, RGB_SAD, RGB_M_B, BL_TOGG, KC_INS, KC_DEL, KC_TRNS,
+                       KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_INS, KC_DEL, KC_TRNS,
                        KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, MO(1), KC_TRNS, KC_TRNS
 ),
 
@@ -115,12 +115,6 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 };
 
 // clang-format on
-
-void keyboard_post_init_user(void) {
-    ap2_led_enable();
-    ap2_led_set_profile(7);
-}
-
 const ap2_led_t layer_indicators[] = {
     {.p.red = 0xff, .p.green = 0xff, .p.blue = 0xff, .p.alpha = 0xff}, // BASE
     {.p.red = 0xff, .p.green = 0x00, .p.blue = 0x00, .p.alpha = 0xff}, // FN1
@@ -128,32 +122,43 @@ const ap2_led_t layer_indicators[] = {
     {.p.red = 0x00, .p.green = 0x00, .p.blue = 0xff, .p.alpha = 0xff}, // FN3
 };
 
+void reset_color_to_default(ap2_led_t color) {
+    ap2_led_reset_foreground_color();
+    ap2_led_set_foreground_color(color.p.red, color.p.green, color.p.blue);
+}
+
+// post init function
+void keyboard_post_init_user(void) {
+    // enable led lighting
+    ap2_led_enable();
+    ap2_led_set_profile(0);
+
+    // default set all leds to white
+    reset_color_to_default(layer_indicators[BASE]);
+}
+
 layer_state_t layer_state_set_user(layer_state_t state) {
       switch (get_highest_layer(state)) {
         case FN1:
             // Set the leds to green
-            ap2_led_mask_set_key(0, 0, layer_indicators[FN1]);
+            ap2_led_mask_set_key(4, 6, layer_indicators[FN1]);
             break;
         case FN2:
             // Set the leds to blue
-            ap2_led_mask_set_key(0, 0, layer_indicators[FN2]);
+            ap2_led_mask_set_key(4, 6, layer_indicators[FN2]);
             break;
         case FN3:
             // Set the leds to red
-            ap2_led_mask_set_key(0, 0, layer_indicators[FN3]);
+            ap2_led_mask_set_key(4, 6, layer_indicators[FN3]);
             break;
         default:
-            // Reset back to the current profile
-            ap2_led_reset_foreground_color();
-            // base is white
-            ap2_led_set_foreground_color(0xFF, 0xFF, 0xFF);
+            reset_color_to_default(layer_indicators[BASE]);
             break;
     }
     return state;
 }
 
 // The function to handle the caps lock logic
-// It's called after the capslock changes state or after entering layers 1 and 2.
 bool led_update_user(led_t leds) {
     if (leds.caps_lock) {
         // Set the caps-lock to red
