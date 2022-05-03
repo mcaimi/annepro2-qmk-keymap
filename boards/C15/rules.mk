@@ -27,7 +27,7 @@ RGBLIGHT_ENABLE = no        # Enable keyboard RGB underglow
 AUDIO_ENABLE = no           # Audio output
 
 # Custom RGB matrix handling
-RGB_MATRIX_ENABLE = yes
+RGB_MATRIX_ENABLE = no
 RGB_MATRIX_DRIVER = custom
 
 # Keys

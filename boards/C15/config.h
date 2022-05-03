@@ -50,6 +50,3 @@
 // Obins stock firmware has something similar to this already enabled, but disabled by default in QMK
 #define PERMISSIVE_HOLD
 
-// show layer rgb even if rgb is off
-#define RGBLIGHT_LAYERS_OVERRIDE_RGB_OFF
-
