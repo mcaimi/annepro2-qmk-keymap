@@ -1,0 +1,9 @@
+{
+    "keyboard_name": "Anne Pro 2 C15 (QMK)",
+    "manufacturer": "Obins",
+    "usb": {
+        "vid": "0xfeed",
+        "pid": "0xAC15",
+        "device_version": "0.0.1"
+    }
+}
