@@ -18,7 +18,7 @@ cp -v /custom/boards/C15/rules.mk $C15_BOARD/rules.mk
 cp -v /custom/boards/C15/info.json $C15_BOARD/info.json
 
 # copy custom keymap
-cp -vr /custom/keymap $C15_KEYMAP/$KEYMAP_NAME/
+cp -vr /custom/keymap/keymap.c $C15_KEYMAP/$KEYMAP_NAME/
 
 # build keyboard firmware
 qmk compile
@@ -29,5 +29,5 @@ cd /AnnePro2-Shine
 make C15
 
 # copy built firmware
-cp -v /qmk_firmware/annepro2_c15_$KEYMAP_NAME.bin /target/annepro2_c15_$KEYMAP_NAME_$(date +%F).bin
+cp -v /qmk_firmware/annepro2_c15_${KEYMAP_NAME}.bin /target/annepro2_c15_${KEYMAP_NAME}_$(date +%F).bin
 cp -v /AnnePro2-Shine/build/annepro2-shine-C15.bin /target/annepro2_c15_shine_$(date +%F).bin
