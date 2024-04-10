@@ -2,11 +2,12 @@
 
 C15_BOARD=/qmk_firmware/keyboards/annepro2/c15
 C15_KEYMAP=/qmk_firmware/keyboards/annepro2/keymaps
+KEYMAP_NAME=vial
 
 # setup qmk firmware
 qmk setup -y -H /vial-qmk -b vial vial-kb/vial-qmk || exit -1
 qmk config user.keyboard=annepro2/c15
-qmk config user.keymap=vial
+qmk config user.keymap=$KEYMAP_NAME
 
 # build keyboard firmware
 qmk compile
