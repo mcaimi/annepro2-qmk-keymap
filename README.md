@@ -12,9 +12,18 @@ $ cd qmk_build && podman build -t qmk/builder:latest .
 
 2- Run the builder image to assemble the firmware
 
+To build the vanilla QMK image...
+
 ```bash
 $ mkdir -p /tmp/output
-$ podman run --rm --name qmk_builder -v <repo_basepath>/:/custom/:z -v /tmp/output:/target/:z qmk/builder:latest
+$ podman run --rm --name qmk_builder -v <repo_basepath>/:/custom/:z -v /tmp/output:/target/:z qmk/builder:latest /tmp/build-vanilla.sh
+```
+
+To build the vial-qmk fork image...
+
+```bash
+$ mkdir -p /tmp/output
+$ podman run --rm --name qmk_builder -v <repo_basepath>/:/custom/:z -v /tmp/output:/target/:z qmk/builder:latest /tmp/build-vial.sh
 ```
 
 3- Flash images
