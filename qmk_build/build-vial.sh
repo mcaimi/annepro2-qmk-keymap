@@ -1,6 +1,6 @@
 #!/bin/bash
 
-$QMK_FIRMWARE=/vial-qmk
+QMK_FIRMWARE=/vial-qmk
 C15_KEYMAP=$QMK_FIRMWARE/keyboards/annepro2/keymaps
 KEYMAP_NAME=vial
 

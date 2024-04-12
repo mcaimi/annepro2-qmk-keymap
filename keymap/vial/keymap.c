@@ -98,7 +98,7 @@ struct _key_coord_t {
   // matrix coords, start from (0,0)
   int x;
   int y;
-}
+};
 typedef struct _key_coord_t key_coord_t;
 const key_coord_t keylayer_coords[] = {
   { .x = 4, .y = 7 }, // BASE INDICATOR
