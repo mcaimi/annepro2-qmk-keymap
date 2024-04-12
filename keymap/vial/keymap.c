@@ -22,6 +22,8 @@ enum anne_pro_layers {
     _FN2_LAYER,
 };
 
+#define DEFAULT_PROFILE 2
+
 // clang-format off
 // Key symbols are based on QMK. Use them to remap your keyboard
 /*
@@ -101,9 +103,9 @@ struct _key_coord_t {
 };
 typedef struct _key_coord_t key_coord_t;
 const key_coord_t keylayer_coords[] = {
-  { .x = 4, .y = 7 }, // BASE INDICATOR
-  { .x = 4, .y = 5 }, // FN1 LAYER INDICATOR
-  { .x = 4, .y = 6 }, // FN2 LAYER INDICATOR
+  { .x = 0, .y = 4 }, // BASE INDICATOR
+  { .x = 0, .y = 4 }, // FN1 LAYER INDICATOR
+  { .x = 0, .y = 4 }, // FN2 LAYER INDICATOR
 };
 
 // layer indication led colors
@@ -113,30 +115,33 @@ const ap2_led_t layer_indicators[] = {
     {.p.red = 0x00, .p.green = 0xff, .p.blue = 0x00, .p.alpha = 0xff}, // FN2
 };
 
+void reset_key_backlight(ap2_led_t color) {
+  ap2_led_set_foreground_color(color.p.red, color.p.green, color.p.blue);
+}
+
+// setup initial led state
+void keyboard_post_init_user(void) {
+  // enable led lighting
+  ap2_led_enable();
+  reset_key_backlight(layer_indicators[_BASE_LAYER]);
+  ap2_led_set_profile(DEFAULT_PROFILE);
+}
+
 // update layer key indicator
 // turn on or off leds on layer keys if layer is enabled/disabled
 layer_state_t layer_state_set_user(layer_state_t state) {
       switch (get_highest_layer(state)) {
         case _FN1_LAYER:
-          // unset other keylayer indicators
-          ap2_led_unset_sticky_key(keylayer_coords[_BASE_LAYER].x, keylayer_coords[_BASE_LAYER].y);
-          ap2_led_unset_sticky_key(keylayer_coords[_FN2_LAYER].x, keylayer_coords[_FN2_LAYER].y);
           // Set FN1 keyled indicator
-          ap2_led_sticky_set_key(keylayer_coords[_FN1_LAYER].x, keylayer_coords[_FN1_LAYER].y, layer_indicators[_FN1_LAYER]);
+          ap2_led_mask_set_key(keylayer_coords[_FN1_LAYER].y, keylayer_coords[_FN1_LAYER].x, layer_indicators[_FN1_LAYER]);
           break;
         case _FN2_LAYER:
-          // unset other keylayer indicators
-          ap2_led_unset_sticky_key(keylayer_coords[_BASE_LAYER].x, keylayer_coords[_BASE_LAYER].y);
-          ap2_led_unset_sticky_key(keylayer_coords[_FN1_LAYER].x, keylayer_coords[_FN1_LAYER].y);
           // Set FN1 keyled indicator
-          ap2_led_sticky_set_key(keylayer_coords[_FN2_LAYER].x, keylayer_coords[_FN2_LAYER].y, layer_indicators[_FN2_LAYER]);
+          ap2_led_mask_set_key(keylayer_coords[_FN2_LAYER].y, keylayer_coords[_FN2_LAYER].x, layer_indicators[_FN2_LAYER]);
           break;
-        case _BASE_LAYER:
-          // unset other keylayer indicators
-          ap2_led_unset_sticky_key(keylayer_coords[_FN2_LAYER].x, keylayer_coords[_FN2_LAYER].y);
-          ap2_led_unset_sticky_key(keylayer_coords[_FN1_LAYER].x, keylayer_coords[_FN1_LAYER].y);
+        default:
           // Set FN1 keyled indicator
-          ap2_led_sticky_set_key(keylayer_coords[_BASE_LAYER].x, keylayer_coords[_BASE_LAYER].y, layer_indicators[_BASE_LAYER]);
+          ap2_led_mask_set_key(keylayer_coords[_BASE_LAYER].y, keylayer_coords[_BASE_LAYER].x, layer_indicators[_BASE_LAYER]);
           break;
     }
     return state;
