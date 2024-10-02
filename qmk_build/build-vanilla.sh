@@ -15,7 +15,7 @@ qmk new-keymap
 # copy custom configuration from volume
 cp -v /custom/boards/c15/vanilla/config.h $C15_BOARD/config.h
 cp -v /custom/boards/c15/vanilla/rules.mk $C15_BOARD/rules.mk
-cp -v /custom/boards/c15/vanilla/info.json $C15_BOARD/info.json
+cp -v /custom/boards/c15/vanilla/keyboard.json $C15_BOARD/keyboard.json
 
 # copy custom keymap
 cp -vr /custom/keymap/vanilla/keymap.c $C15_KEYMAP/$KEYMAP_NAME/
