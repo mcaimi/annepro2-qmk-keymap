@@ -1,10 +1,29 @@
-VIA_ENABLE = yes
-VIAL_ENABLE = yes
+# MCU
+MCU = cortex-m0plus
+ARMV = 6
+USE_FPU = no
+MCU_FAMILY = HT32
+MCU_SERIES = HT32F523xx
+MCU_LDSCRIPT = HT32F52342_ANNEPRO2
+MCU_STARTUP = ht32f523xx
 
-LTO_ENABLE = yes
-QMK_SETTINGS = no
-TAP_DANCE_ENABLE = yes
-COMBO_ENABLE = no
-KEY_OVERRIDE_ENABLE = yes
+BOARD = ANNEPRO2_C15
 
-RGB_MATRIX_ENABLE = no
+# Bootloader selection
+BOOTLOADER = custom
+PROGRAM_CMD = annepro2_tools --boot $(BUILD_DIR)/$(TARGET).bin
+
+# Anne Pro 2
+SRC = \
+	annepro2_ble.c \
+	ap2_led.c \
+	protocol.c \
+	rgb_driver.c \
+
+# Unnecessary features 
+CONSOLE_ENABLE = no
+COMMAND_ENABLE = no
+SPACE_CADET_ENABLE = no
+GRAVE_ESC_ENABLE = no 
+MUSIC_ENABLE = no
+AUDIO_ENABLE = no

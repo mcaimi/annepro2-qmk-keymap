@@ -44,9 +44,9 @@ enum anne_pro_layers {
  [_BASE_LAYER] = LAYOUT_60_ansi( /* Base */
     KC_ESC, KC_1, KC_2, KC_3, KC_4, KC_5, KC_6, KC_7, KC_8, KC_9, KC_0, KC_MINS, KC_EQL, KC_BSPC,
     KC_TAB, KC_Q, KC_W, KC_E, KC_R, KC_T, KC_Y, KC_U, KC_I, KC_O, KC_P, KC_LBRC, KC_RBRC, KC_BSLS,
-    LT(_FN1_LAYER,KC_CAPS), KC_A, KC_S, KC_D, KC_F, KC_G, KC_H, KC_J, KC_K, KC_L, KC_SCLN, KC_QUOT, KC_ENT,
-    KC_LSFT, KC_Z, KC_X, KC_C, KC_V, KC_B, KC_N, KC_M, KC_COMM, KC_DOT, KC_SLSH, RSFT_T(KC_UP),
-    KC_LCTL, KC_LGUI, KC_LALT, KC_SPC, KC_RALT, LT(_FN1_LAYER,KC_LEFT), LT(_FN2_LAYER,KC_DOWN), RCTL_T(KC_RGHT)
+    KC_CAPS, KC_A, KC_S, KC_D, KC_F, KC_G, KC_H, KC_J, KC_K, KC_L, KC_SCLN, KC_QUOT, KC_ENT,
+    KC_LSFT, KC_Z, KC_X, KC_C, KC_V, KC_B, KC_N, KC_M, KC_COMM, KC_DOT, KC_SLSH, KC_RSFT,
+    KC_LCTL, KC_LGUI, KC_LALT, KC_SPC, KC_RALT, MO(_FN1_LAYER), MO(_FN2_LAYER), KC_RCTL
 ),
   /*
   * Layer _FN1_LAYER
@@ -68,7 +68,7 @@ enum anne_pro_layers {
     KC_TRNS, KC_TRNS, KC_UP, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_PSCR, KC_HOME, KC_END, KC_TRNS,
     KC_TRNS, KC_LEFT, KC_DOWN, KC_RGHT, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_PGUP, KC_PGDN, KC_TRNS,
     KC_TRNS, KC_VOLU, KC_VOLD, KC_MUTE, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_INS, KC_DEL, KC_TRNS,
-    KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, MO(_FN2_LAYER), KC_TRNS
+    KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_APPLICATION, KC_TRNS
 ),
   /*
   * Layer _FN2_LAYER
@@ -87,10 +87,10 @@ enum anne_pro_layers {
   */
  [_FN2_LAYER] = LAYOUT_60_ansi( /* Base */
     KC_TRNS, KC_AP2_BT1, KC_AP2_BT2, KC_AP2_BT3, KC_AP2_BT4, KC_TRNS, KC_TRNS, RGB_HUI, RGB_SAI, RGB_VAI, RGB_SPI, RGB_MOD, RGB_TOG, KC_TRNS,
-    MO(_FN2_LAYER), KC_TRNS, KC_UP, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_PSCR, KC_HOME, KC_END, KC_TRNS,
+    KC_TRNS, KC_TRNS, KC_UP, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_PSCR, KC_HOME, KC_END, KC_TRNS,
     KC_TRNS, KC_LEFT, KC_DOWN, KC_RGHT, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_PGUP, KC_PGDN, KC_TRNS,
     KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_INS, KC_DEL, KC_TRNS,
-    KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, MO(_FN1_LAYER), MO(_FN2_LAYER), KC_TRNS
+    KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_RGUI, KC_TRNS, KC_TRNS
  ),
 };
 // clang-format on
@@ -110,7 +110,7 @@ const key_coord_t keylayer_coords[] = {
 
 // layer indication led colors
 const ap2_led_t layer_indicators[] = {
-    {.p.red = 0xff, .p.green = 0xff, .p.blue = 0xff, .p.alpha = 0xff}, // BASE
+    {.p.red = 0x00, .p.green = 0x00, .p.blue = 0xff, .p.alpha = 0xff}, // BASE
     {.p.red = 0xff, .p.green = 0x00, .p.blue = 0x00, .p.alpha = 0xff}, // FN1
     {.p.red = 0x00, .p.green = 0xff, .p.blue = 0x00, .p.alpha = 0xff}, // FN2
 };
@@ -136,11 +136,11 @@ layer_state_t layer_state_set_user(layer_state_t state) {
           ap2_led_mask_set_key(keylayer_coords[_FN1_LAYER].y, keylayer_coords[_FN1_LAYER].x, layer_indicators[_FN1_LAYER]);
           break;
         case _FN2_LAYER:
-          // Set FN1 keyled indicator
+          // Set FN2 keyled indicator
           ap2_led_mask_set_key(keylayer_coords[_FN2_LAYER].y, keylayer_coords[_FN2_LAYER].x, layer_indicators[_FN2_LAYER]);
           break;
         default:
-          // Set FN1 keyled indicator
+          // Set BASE keyled indicator
           ap2_led_mask_set_key(keylayer_coords[_BASE_LAYER].y, keylayer_coords[_BASE_LAYER].x, layer_indicators[_BASE_LAYER]);
           break;
     }
